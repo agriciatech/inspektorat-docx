@@ -690,7 +690,7 @@ exports.setExcelLKE = async (req, res) => {
       ],
     });
 
-    const outputFile = `uploads/ND Rekapitulasi Evaluasi SAKIP-${tahun}.docx`;
+    const outputFile = `uploads/Rekapitulasi Evaluasi SAKIP.docx`;
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(outputFile, buffer);
     });

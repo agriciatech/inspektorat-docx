@@ -51,7 +51,6 @@ exports.setPDFLKE = async (req, res) => {
     const resultPredikat =
       await prisma.$queryRaw`SELECT * FROM "Predikat" ORDER BY predikat`;
 
-    console.log(resultPredikat);
     let allSum = 0;
     let lengthInspektur = resultInspektur.length;
     resultInspektur.map(async (item, index) => {
@@ -690,7 +689,7 @@ exports.setPDFLKE = async (req, res) => {
       ],
     });
 
-    const outputFile = `uploads/Rekapitulasi Evaluasi SAKIP.docx`;
+    const outputFile = `uploads/ND Rekapitulasi Evaluasi SAKIP-${tahun}.docx`;
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(outputFile, buffer);
     });
