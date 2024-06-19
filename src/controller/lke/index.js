@@ -72,7 +72,7 @@ exports.setPDFLKE = async (req, res) => {
     let onceTime = true;
     let predikat = "";
     resultPredikat.map((item, index) => {
-      if (average > item.nilai && onceTime) {
+      if (average > parseInt(item.nilai) && onceTime) {
         onceTime = false;
         predikat = item.predikat;
       }
