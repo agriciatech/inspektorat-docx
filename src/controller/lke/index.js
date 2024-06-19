@@ -65,7 +65,7 @@ exports.setPDFLKE = async (req, res) => {
           });
         }
       });
-      allSum += parseFloat(item.nilai);
+      allSum += parseFloat(item.nilai).toFixed(2);
     });
 
     const average = (allSum / lengthInspektur).toFixed(2);
@@ -103,7 +103,7 @@ exports.setPDFLKE = async (req, res) => {
               new TableCell({
                 children: [
                   new Paragraph({
-                    text: item.nilai.toString(),
+                    text: item.nilai.toFixed(2).toString(),
                     alignment: AlignmentType.CENTER,
                   }),
                 ],
