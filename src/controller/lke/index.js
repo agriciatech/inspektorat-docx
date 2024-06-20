@@ -292,8 +292,8 @@ exports.setPDFLKE = async (req, res) => {
             },
             type: SectionType.CONTINUOUS,
           },
-          footers: {
-            default: new Footer({
+          headers: {
+            default: new Header({
               children: [
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
@@ -304,6 +304,21 @@ exports.setPDFLKE = async (req, res) => {
                   ],
                 }),
               ],
+            }),
+            first: new Header({
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      children: [""],
+                    }),
+                  ],
+                }),
+              ],
+              options: {
+                firstPage: true,
+              },
             }),
           },
           children: [
