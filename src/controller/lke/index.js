@@ -284,6 +284,7 @@ exports.setPDFLKE = async (req, res) => {
       sections: [
         {
           properties: {
+            titlePage: true,
             page: {
               pageNumbers: {
                 start: 1,
@@ -311,14 +312,11 @@ exports.setPDFLKE = async (req, res) => {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      children: [""],
+                      children: [],
                     }),
                   ],
                 }),
               ],
-              options: {
-                firstPage: true,
-              },
             }),
           },
           children: [
@@ -708,6 +706,30 @@ exports.setPDFLKE = async (req, res) => {
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(outputFile, buffer);
     });
+
+    // const inputBuffer = fs.readFileSync(outputFile);
+    // const docs = new docx.Document(inputBuffer);
+
+    // // Access the first section and remove the header from the first page
+    // const firstSection = docs.sections[0];
+    // if (firstSection) {
+    //   const header = firstSection.headers.default;
+    //   if (header) {
+    //     firstSection.headers.default = new docx.Header();
+    //   }
+    // }
+
+    // // Save the modified document
+    // const packer = new docx.Packer();
+    // packer
+    //   .toBuffer(doc)
+    //   .then((buffer) => {
+    //     fs.writeFileSync(outputFile, buffer);
+    //     console.log(`Modified DOCX saved to: ${outputFile}`);
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error saving DOCX:", err);
+    //   });
     res.status(200).json({ data: outputFile });
   } catch (error) {
     console.error("Gagal membuat pengguna:", error);

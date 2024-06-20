@@ -275,6 +275,7 @@ exports.setPDF = async (req, res) => {
       sections: [
         {
           properties: {
+            titlePage: true,
             page: {
               pageNumbers: {
                 start: 1,
@@ -295,9 +296,18 @@ exports.setPDF = async (req, res) => {
                   ],
                 }),
               ],
-              options: {
-                firstPage: true,
-              },
+            }),
+            first: new Header({
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      children: [],
+                    }),
+                  ],
+                }),
+              ],
             }),
           },
           children: [
