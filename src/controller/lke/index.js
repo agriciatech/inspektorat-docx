@@ -49,7 +49,7 @@ exports.setPDFLKE = async (req, res) => {
       await prisma.$queryRaw`SELECT SUM(nilai), fk_component,fk_inspeksi FROM "RInspeksiSubKomponen" as a JOIN "SubKomponen" as b ON a.fk_sub_component = b.id GROUP BY fk_component,fk_inspeksi ORDER BY fk_component`;
 
     const resultPredikat =
-      await prisma.$queryRaw`SELECT * FROM "Predikat" ORDER BY predikat`;
+      await prisma.$queryRaw`SELECT * FROM "Predikat" where index = 1 ORDER BY predikat `;
 
     let allSum = 0;
     let lengthInspektur = resultInspektur.length;
@@ -65,10 +65,10 @@ exports.setPDFLKE = async (req, res) => {
           });
         }
       });
-      allSum += parseFloat(item.nilai).toFixed(2);
+      allSum += item.nilai;
     });
 
-    const average = (allSum / lengthInspektur).toFixed(2);
+    const average = (allSum / resultInspektur.length).toFixed(2);
     let onceTime = true;
     let predikat = "";
     resultPredikat.map((item, index) => {
