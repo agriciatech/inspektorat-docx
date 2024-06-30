@@ -11,7 +11,8 @@
     "officegen": "^0.6.5",
     "prisma": "^5.15.0",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "xlsx": "^0.18.5"
   },
   "name": "docx",
   "version": "1.0.0",

@@ -9,8 +9,7 @@ const router = express.Router();
 router.get("/inspkesisgeneratepdf/:id", setPDF);
 router.get("/generateinspeksiutama/:id", setPDFLKE);
 router.get("/generateinspeksiexcel", setExcelLKE);
-router.get("/generateexcellke/:id", setPDFLKE);
-router.get("/generateinspeksiutama/:id", setExcelLKEUtama);
+router.get("/generateexcellke/:id", setExcelLKEUtama);
 router.get("/generateexcelutama/:id", setLKEExcel);
 
 module.exports = router;

@@ -806,6 +806,8 @@ exports.setPDF = async (req, res) => {
     });
 
     const outputFile = `uploads/LHE-AKIP-${user}-${tahun}.docx`;
+    fs.unlinkSync(outputFile);
+
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(outputFile, buffer);
     });
