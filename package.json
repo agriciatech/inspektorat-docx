@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@prisma/client": "^5.15.0",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "docx": "^8.5.0",
     "docxtemplater": "^3.47.4",
