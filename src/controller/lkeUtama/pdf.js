@@ -45,6 +45,8 @@ exports.setPDF = async (req, res) => {
         result1[0].fk_user
       )}`;
 
+    const predikat = result1[0].kategori;
+
     const resultComponent =
       await prisma.$queryRaw`SELECT * FROM "Component" ORDER BY nomor`;
     const resultInspeksiKriteria =
@@ -480,9 +482,7 @@ exports.setPDF = async (req, res) => {
         }),
         new Paragraph({
           spacing: { line: 360 },
-          text: `Hasil evaluasi dituangkan dalam bentuk nilai dengan kisaran mulai dari 0 s.d. 100. Berdasarkan hasil evaluasi, tingkat akuntabilitas ${user} Kabupaten Lampung Selatan memperoleh nilai sebesar ${total.toString()} dengan kategori ${
-            result1[0].kategori
-          }`,
+          text: `Hasil evaluasi dituangkan dalam bentuk nilai dengan kisaran mulai dari 0 s.d. 100. Berdasarkan hasil evaluasi, tingkat akuntabilitas ${user} Kabupaten Lampung Selatan memperoleh nilai sebesar ${total.toString()} dengan kategori ${predikat}`,
           numbering: {
             reference: "numbering-format",
             level: 0,
