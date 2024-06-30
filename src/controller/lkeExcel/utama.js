@@ -1,12 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
 const fs = require("fs");
 const prisma = new PrismaClient();
-const axios = require("axios");
 const ExcelJS = require("exceljs");
 
 exports.setExcelLKEUtama = async (req, res) => {
-  let result = [];
-  let average = {};
   try {
     const { id } = req.params;
 
@@ -50,7 +47,7 @@ exports.setExcelLKEUtama = async (req, res) => {
     const tahun = resultTahun[0].tahun;
     const user = resultInspektur[0].name;
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("My Sheet");
+    const worksheet = workbook.addWorksheet("LKE UTAMA");
 
     worksheet.getCell("A1").value = "HASIL EVALUASI AKUNTABILITAS KINERJA";
     worksheet.getCell("A2").value = `${user} Lampung Selatan`;
@@ -173,6 +170,7 @@ exports.setExcelLKEUtama = async (req, res) => {
         cell.alignment = { vertical: "middle", horizontal: "center" };
       });
     });
+    worksheet.getColumn("A").width = 5;
     worksheet.getColumn("B").width = 50;
     worksheet.getColumn("B").alignment = {
       vertical: "middle",
@@ -206,7 +204,7 @@ exports.setExcelLKEUtama = async (req, res) => {
 
     // Auto-size columns (optional)
 
-    const outputFile = `uploads/LKE Utama Evaluasi SAKIP.xlsx`;
+    const outputFile = `uploads/LKE Utama Evaluasi SAKIP ${user} ${tahun}.xlsx`;
     await workbook.xlsx.writeFile(outputFile);
     res.status(200).json({ data: outputFile });
   } catch (error) {
