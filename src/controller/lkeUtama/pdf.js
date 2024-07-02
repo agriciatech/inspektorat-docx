@@ -105,7 +105,7 @@ exports.setPDF = async (req, res) => {
               new TableCell({
                 children: [
                   new Paragraph({
-                    text: subKomponen[index].sum.toString(),
+                    text: subKomponen[index].sum.toFixed(2).toString(),
                     alignment: AlignmentType.CENTER,
                   }),
                 ],
@@ -233,9 +233,9 @@ exports.setPDF = async (req, res) => {
               },
               {
                 level: 1,
-                format: LevelFormat.LOWER_LETTER,
+                format: LevelFormat.UPPER_LETTER,
                 text: "%2.",
-                alignment: AlignmentType.LOWER_LETTER,
+                alignment: AlignmentType.UPPER_LETTER,
                 style: {
                   paragraph: {
                     indent: {
@@ -261,7 +261,7 @@ exports.setPDF = async (req, res) => {
               },
               {
                 level: 3,
-                format: LevelFormat.UPPER_LETTER,
+                format: LevelFormat.LOWER_LETTER,
                 text: "%4.",
                 alignment: AlignmentType.START,
                 style: {
@@ -613,7 +613,7 @@ exports.setPDF = async (req, res) => {
                     new Paragraph({
                       children: [
                         new TextRun({
-                          text: total.toString(),
+                          text: total.toFixed(2).toString(),
                         }),
                       ],
                       alignment: AlignmentType.CENTER,
