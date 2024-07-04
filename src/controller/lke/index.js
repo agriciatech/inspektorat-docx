@@ -290,6 +290,12 @@ exports.setPDFLKE = async (req, res) => {
                 start: 1,
                 formatType: NumberFormat.DECIMAL,
               },
+              margins: {
+                top: 2.5,
+                right: 2,
+                bottom: 2.5,
+                left: 3,
+              },
             },
             type: SectionType.CONTINUOUS,
           },

@@ -28,6 +28,10 @@ const {
 const fs = require("fs");
 const prisma = new PrismaClient();
 
+function cmToTwip(cm) {
+  return Math.round(cm * 28.35);
+}
+
 exports.setPDF = async (req, res) => {
   try {
     const { id } = req.params;
@@ -283,6 +287,12 @@ exports.setPDF = async (req, res) => {
                 start: 1,
                 formatType: NumberFormat.DECIMAL,
               },
+              margins: {
+                top: cmToTwip(2.5),
+                right: cmToTwip(2),
+                bottom: cmToTwip(2.5),
+                left: cmToTwip(3),
+              },
             },
             type: SectionType.CONTINUOUS,
           },
@@ -353,7 +363,7 @@ exports.setPDF = async (req, res) => {
             new Paragraph({
               children: [
                 new TextRun({ text: "Hal" }),
-                new TextRun("\t: Laporan Evalueasi Akuintabilitas"),
+                new TextRun("\t: Laporan Evaluasi Akuintabilitas"),
               ],
               tabStops: [
                 {
