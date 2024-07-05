@@ -29,7 +29,7 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 
 function cmToTwip(cm) {
-  return (cm * 28.35 * 20).toFixed(2);
+  return Math.round(cm * 28.35 * 20); // Convert cm to points and then to twentieths of a point
 }
 
 exports.setPDFLKE = async (req, res) => {
