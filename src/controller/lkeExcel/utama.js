@@ -66,7 +66,7 @@ exports.setExcelLKEUtama = async (req, res) => {
       "No",
       "Komponen/Sub Komponen/Kriteria",
       "Bobot",
-      "Nilai 2022",
+      `Nilai ${tahun}`,
     ];
 
     // Add headers to the worksheet
