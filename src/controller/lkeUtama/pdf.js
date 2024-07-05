@@ -74,10 +74,10 @@ exports.setPDF = async (req, res) => {
     });
     const tahun = resultTahun[0].tahun;
     const user = resultInspektur[0].name;
-    const margintop = cmToTwentiethsOfPoint(2.5);
-    const marginleft = cmToTwentiethsOfPoint(3);
-    const marginright = cmToTwentiethsOfPoin2(3);
-    const marginbottom = cmToTwentiethsOfPoint(2.5);
+    const margintop = cmToTwip(2.5);
+    const marginleft = cmToTwip(3);
+    const marginright = cmToTwip(3);
+    const marginbottom = cmToTwip(2.5);
 
     const generateRows = (allData, subKomponen) =>
       allData.map(
