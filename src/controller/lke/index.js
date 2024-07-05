@@ -709,6 +709,24 @@ exports.setPDFLKE = async (req, res) => {
     });
 
     const outputFile = `uploads/ND Rekapitulasi Evaluasi SAKIP-${tahun}.docx`;
+    fs.access(outputFile, fs.constants.F_OK, (err) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          console.log("File does not exist");
+        } else {
+          console.error("Error checking file existence:", err);
+        }
+      } else {
+        // File exists, so unlink (delete) it
+        fs.unlink(outputFile, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Error deleting file:", unlinkErr);
+          } else {
+            console.log(`${outputFile} has been deleted successfully`);
+          }
+        });
+      }
+    });
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(outputFile, buffer);
     });

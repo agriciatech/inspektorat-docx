@@ -169,6 +169,24 @@ exports.setExcelLKE = async (req, res) => {
     // worksheet.addRow([index + 1, result.namaOPD]);
 
     const outputFile = `uploads/Rekapitulasi Evaluasi SAKIP.xlsx`;
+    fs.access(outputFile, fs.constants.F_OK, (err) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          console.log("File does not exist");
+        } else {
+          console.error("Error checking file existence:", err);
+        }
+      } else {
+        // File exists, so unlink (delete) it
+        fs.unlink(outputFile, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Error deleting file:", unlinkErr);
+          } else {
+            console.log(`${outputFile} has been deleted successfully`);
+          }
+        });
+      }
+    });
     await workbook.xlsx.writeFile(outputFile);
     res.status(200).json({ data: outputFile });
   } catch (error) {
