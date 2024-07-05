@@ -291,6 +291,12 @@ exports.setPDFLKE = async (req, res) => {
       },
       sections: [
         {
+          margins: {
+            top: margintop,
+            right: marginright,
+            bottom: marginbottom,
+            left: marginleft,
+          },
           properties: {
             titlePage: true,
             page: {
@@ -300,12 +306,6 @@ exports.setPDFLKE = async (req, res) => {
               },
             },
             type: SectionType.CONTINUOUS,
-          },
-          margins: {
-            top: margintop,
-            right: marginright,
-            bottom: marginbottom,
-            left: marginleft,
           },
           headers: {
             default: new Header({
