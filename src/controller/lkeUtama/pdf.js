@@ -29,7 +29,7 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 
 function cmToTwip(cm) {
-  return Math.round(cm * 28.35);
+  return (cm * 28.35 * 20).toFixed(2);
 }
 
 exports.setPDF = async (req, res) => {
@@ -825,7 +825,6 @@ exports.setPDF = async (req, res) => {
           console.error("Error checking file existence:", err);
         }
       } else {
-        // File exists, so unlink (delete) it
         fs.unlink(outputFile, (unlinkErr) => {
           if (unlinkErr) {
             console.error("Error deleting file:", unlinkErr);

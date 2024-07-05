@@ -28,6 +28,10 @@ const {
 const fs = require("fs");
 const prisma = new PrismaClient();
 
+function cmToTwip(cm) {
+  return (cm * 28.35 * 20).toFixed(2);
+}
+
 exports.setPDFLKE = async (req, res) => {
   try {
     const { id } = req.params;
@@ -291,10 +295,10 @@ exports.setPDFLKE = async (req, res) => {
                 formatType: NumberFormat.DECIMAL,
               },
               margins: {
-                top: 2.5,
-                right: 2,
-                bottom: 2.5,
-                left: 3,
+                top: cmToTwip(2.5),
+                right: cmToTwip(2),
+                bottom: cmToTwip(2.5),
+                left: cmToTwip(3),
               },
             },
             type: SectionType.CONTINUOUS,
