@@ -74,10 +74,10 @@ exports.setPDF = async (req, res) => {
     });
     const tahun = resultTahun[0].tahun;
     const user = resultInspektur[0].name;
-    const margintop = cmToTwentiethsOfPoint(3);
+    const margintop = cmToTwentiethsOfPoint(2.5);
     const marginleft = cmToTwentiethsOfPoint(3);
-    const marginright = cmToTwentiethsOfPoint(3);
-    const marginbottom = cmToTwentiethsOfPoint(3);
+    const marginright = cmToTwentiethsOfPoin2(3);
+    const marginbottom = cmToTwentiethsOfPoint(2.5);
 
     const generateRows = (allData, subKomponen) =>
       allData.map(
@@ -284,18 +284,18 @@ exports.setPDF = async (req, res) => {
       },
       sections: [
         {
+          margins: {
+            top: margintop,
+            right: marginright,
+            bottom: marginbottom,
+            left: marginleft,
+          },
           properties: {
             titlePage: true,
             page: {
               pageNumbers: {
                 start: 1,
                 formatType: NumberFormat.DECIMAL,
-              },
-              margins: {
-                top: margintop,
-                right: marginright,
-                bottom: marginbottom,
-                left: marginleft,
               },
             },
             type: SectionType.CONTINUOUS,

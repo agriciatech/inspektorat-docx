@@ -55,10 +55,10 @@ exports.setPDFLKE = async (req, res) => {
     const resultPredikat =
       await prisma.$queryRaw`SELECT * FROM "Predikat" where index = 1 ORDER BY predikat `;
 
-    const margintop = cmToTwentiethsOfPoint(3);
+    const margintop = cmToTwentiethsOfPoint(2.5);
     const marginleft = cmToTwentiethsOfPoint(3);
-    const marginright = cmToTwentiethsOfPoint(3);
-    const marginbottom = cmToTwentiethsOfPoint(3);
+    const marginright = cmToTwentiethsOfPoin2(3);
+    const marginbottom = cmToTwentiethsOfPoint(2.5);
     let allSum = 0;
     let lengthInspektur = resultInspektur.length;
     resultInspektur.map(async (item, index) => {
@@ -298,14 +298,14 @@ exports.setPDFLKE = async (req, res) => {
                 start: 1,
                 formatType: NumberFormat.DECIMAL,
               },
-              margins: {
-                top: margintop,
-                right: marginright,
-                bottom: marginbottom,
-                left: marginleft,
-              },
             },
             type: SectionType.CONTINUOUS,
+          },
+          margins: {
+            top: margintop,
+            right: marginright,
+            bottom: marginbottom,
+            left: marginleft,
           },
           headers: {
             default: new Header({
