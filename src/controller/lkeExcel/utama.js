@@ -121,7 +121,7 @@ exports.setExcelLKEUtama = async (req, res) => {
     });
     catatanComponent.forEach((row) => {
       worksheet.addRow(row);
-      let test = worksheet.actualRowCount;
+      const test = worksheet.actualRowCount + 2;
       worksheet.mergeCells(`B${test}:D${test}`);
     });
 
@@ -140,7 +140,7 @@ exports.setExcelLKEUtama = async (req, res) => {
     });
     rekomendasiComponent.forEach((row) => {
       worksheet.addRow(row);
-      let test = worksheet.actualRowCount;
+      const test = worksheet.actualRowCount + 2;
       worksheet.mergeCells(`B${test}:D${test}`);
     });
     worksheet.addRow();
