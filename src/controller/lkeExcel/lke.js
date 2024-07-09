@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const fs = require("fs");
 const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
+const { default: axios } = require("axios");
 
 exports.setLKEExcel = async (req, res) => {
   let result = [];
@@ -21,23 +22,47 @@ exports.setLKEExcel = async (req, res) => {
       await prisma.$queryRaw`SELECT * FROM "user" WHERE id = ${parseInt(
         result1[0].fk_user
       )}`;
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${1}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-    const predikat = result1[0].kategori;
-
-    const resultComponent =
-      await prisma.$queryRaw`SELECT * FROM "Component" ORDER BY nomor`;
-
-    const resultSubComponent =
-      await prisma.$queryRaw`SELECT * FROM "SubKomponen" as a JOIN "RInspeksiSubKomponen" as b   ON b.fk_sub_component = a.id WHERE fk_inspeksi = ${parseInt(
-        id
-      )} ORDER BY nomor`;
-    const resultInspeksiKriteria =
-      await prisma.$queryRaw`SELECT * FROM "RInspeksiKriteria" WHERE fk_inspeksi = ${parseInt(
-        id
-      )};`;
-
-    const resultKeriteriaAll =
-      await prisma.$queryRaw`SELECT * FROM "Keriteria" ORDER BY nomor`;
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${2}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${3}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${4}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     const resultRInspeksiSubKomponen =
       await prisma.$queryRaw`SELECT SUM(nilai), fk_component FROM "RInspeksiSubKomponen" as a JOIN "SubKomponen" as b ON a.fk_sub_component = b.id  WHERE fk_inspeksi = ${parseInt(
@@ -45,6 +70,7 @@ exports.setLKEExcel = async (req, res) => {
       )} GROUP BY fk_component ORDER BY fk_component`;
 
     let total = 0;
+    console.log(resultRInspeksiSubKomponen);
     resultRInspeksiSubKomponen.map((item, index) => {
       total += parseFloat(item.sum);
     });
@@ -93,7 +119,8 @@ exports.setLKEExcel = async (req, res) => {
         };
       }
     }
-    resultComponent.map((component, index) => {
+    result.map((component, index) => {
+      console.log(component);
       worksheet.addRow([
         parseFloat(component.nomor),
         component.component,
@@ -117,63 +144,52 @@ exports.setLKEExcel = async (req, res) => {
           horizontal: "center",
         };
       }
-      resultSubComponent.map((subKomponen, indexSub) => {
-        if (subKomponen.fk_component == component.id) {
-          worksheet.addRow([
-            subKomponen.nomor,
-            subKomponen.nama,
-            parseFloat(subKomponen.bobot),
-            subKomponen.jawaban,
-            parseFloat(subKomponen.nilai),
-          ]);
-          let headerAktual = worksheet.actualRowCount + 1;
-          for (let i = 0; i < Alphabet.length; i++) {
-            worksheet.getCell(`${Alphabet[i]}${headerAktual}`).fill = {
-              type: "pattern",
-              pattern: "solid",
-              fgColor: { argb: "FFFFCC" }, // Red color
-            };
-            worksheet.getCell(`${Alphabet[i]}${headerAktual}`).font = {
-              bold: true,
-              color: { argb: "000000" },
-            }; // White font color
-            worksheet.getCell(`${Alphabet[i]}${headerAktual}`).alignment = {
-              vertical: "middle",
-              horizontal: "center",
-            };
-          }
-          worksheet.addRow(["Keriteria:"]);
-          let nowCount = worksheet.actualRowCount + 1;
-          worksheet.mergeCells(`A${nowCount}:G${nowCount}`);
-
-          resultKeriteriaAll.map((keriteria, keriteriaIndex) => {
-            if (subKomponen.fk_sub_component == keriteria.fk_komponen) {
-              worksheet.addRow([
-                parseInt(keriteria.nomor),
-                keriteria.keriteria,
-                "",
-                "",
-                "",
-              ]);
-              let nowCount = worksheet.actualRowCount + 1;
-              worksheet.mergeCells(`B${nowCount}:E${nowCount}`);
-
-              resultInspeksiKriteria.map(
-                (dataInspeksiKeriteria, indexInspeksiKeriteria) => {
-                  if (dataInspeksiKeriteria.fk_keriteria == keriteriaIndex) {
-                    worksheet.getCell(`F${nowCount}`).value =
-                      dataInspeksiKeriteria.verifikasi;
-                    worksheet.getCell(`G${nowCount}`).value =
-                      dataInspeksiKeriteria.catatan;
-                  }
-                }
-              );
-            }
-          });
+      component.SubKomponen.map((subKomponen, subKomponenIndex) => {
+        worksheet.addRow([
+          subKomponen.nomor,
+          subKomponen.nama,
+          parseFloat(subKomponen.bobot),
+          subKomponen.Penilaian.jawaban,
+          parseFloat(subKomponen.Penilaian.nilai),
+        ]);
+        let headerAktual = worksheet.actualRowCount + 1;
+        for (let i = 0; i < Alphabet.length; i++) {
+          worksheet.getCell(`${Alphabet[i]}${headerAktual}`).fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FFFFCC" }, // Red color
+          };
+          worksheet.getCell(`${Alphabet[i]}${headerAktual}`).font = {
+            bold: true,
+            color: { argb: "000000" },
+          }; // White font color
+          worksheet.getCell(`${Alphabet[i]}${headerAktual}`).alignment = {
+            vertical: "middle",
+            horizontal: "center",
+          };
         }
+        worksheet.addRow(["Keriteria:"]);
+        let nowCount = worksheet.actualRowCount + 1;
+        worksheet.mergeCells(`A${nowCount}:G${nowCount}`);
+        subKomponen.Keriteria.map((keriteria, indexinspeksi) => {
+          worksheet.addRow([
+            parseInt(keriteria.nomor),
+            keriteria.keriteria,
+            "",
+            "",
+            "",
+            keriteria.Catatan.verifikasi,
+            keriteria.Catatan.catatan,
+          ]);
+          let nowCount = worksheet.actualRowCount + 1;
+          worksheet.mergeCells(`B${nowCount}:E${nowCount}`);
+
+          // console.log(inspeksi.Catatan.catatan);
+        });
       });
     });
-    let headerAktual = worksheet.actualRowCount + 1;
+
+    let headerAktual = worksheet.actualRowCount + 2;
     for (let i = 0; i < Alphabet.length; i++) {
       worksheet.getCell(`${Alphabet[i]}${headerAktual}`).fill = {
         type: "pattern",

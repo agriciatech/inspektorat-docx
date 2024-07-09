@@ -4,8 +4,51 @@ const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
 
 exports.setExcelLKEUtama = async (req, res) => {
+  const result = [];
   try {
     const { id } = req.params;
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${1}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${2}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${3}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${4}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     const result1 =
       await prisma.$queryRaw`SELECT * from "Inspeksi" WHERE id = ${parseInt(
