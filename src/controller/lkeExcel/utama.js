@@ -85,8 +85,6 @@ exports.setExcelLKEUtama = async (req, res) => {
       });
     const predikat = dataInspeksi.kategori;
 
-    console.log(parseInt(result1[0].fk_tahun));
-
     const resultTahun =
       await prisma.$queryRaw`SELECT * from "Tahun" WHERE pk_tahun_id = ${parseInt(
         result1[0].fk_tahun
@@ -188,9 +186,15 @@ exports.setExcelLKEUtama = async (req, res) => {
     result.map((item, index) => {
       item.SubKomponen.map((subkomponen, index) => {
         subkomponen.Keriteria.map((test, index) => {
-          nomorStart++;
-          worksheet.addRow([nomorStart, test.Catatan.catatan]);
-          const row = worksheet.actualRowCount + 1;
+          if (
+            test.Catatan.verifikasi.includes("Sebagian") ||
+            test.Catatan.verifikasi.includes("Tidak")
+          ) {
+            nomorStart++;
+            worksheet.addRow([nomorStart, test.Catatan.catatan]);
+            const row = worksheet.actualRowCount + 1;
+          }
+
           // worksheet.mergeCells(`B${row}:D${row}`);
         });
       });

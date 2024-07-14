@@ -27,6 +27,7 @@ const {
 } = require("docx");
 const fs = require("fs");
 const prisma = new PrismaClient();
+const axios = require("axios");
 
 function cmToTwip(cm) {
   return Math.round(cm * 28.35 * 20); // Convert cm to points and then to twentieths of a point
@@ -35,11 +36,80 @@ function cmToTwip(cm) {
 exports.setPDF = async (req, res) => {
   try {
     const { id } = req.params;
+    const result = [];
+    const resultRekomendasi = [];
+    let dataInspeksi = {};
 
     const result1 =
       await prisma.$queryRaw`SELECT * from "Inspeksi" WHERE id = ${parseInt(
         id
       )}`;
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${1}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${2}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${3}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/components/${4}/${id}`
+      )
+      .then(function (response) {
+        result.push(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/rekomendasi?inspeksi=${id}`
+      )
+      .then(function (response) {
+        resultRekomendasi.push(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/inspeksis/${parseInt(
+          result1[0].fk_user
+        )}/${parseInt(result1[0].fk_tahun)}`
+      )
+      .then(function (response) {
+        dataInspeksi = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     const resultTahun =
       await prisma.$queryRaw`SELECT * from "Tahun" WHERE pk_tahun_id = ${parseInt(
         result1[0].fk_tahun
@@ -49,7 +119,7 @@ exports.setPDF = async (req, res) => {
         result1[0].fk_user
       )}`;
 
-    const predikat = result1[0].kategori;
+    const predikat = dataInspeksi.kategori;
 
     const resultComponent =
       await prisma.$queryRaw`SELECT * FROM "Component" ORDER BY nomor`;
@@ -57,11 +127,6 @@ exports.setPDF = async (req, res) => {
       await prisma.$queryRaw`SELECT * FROM "RInspeksiKriteria" as r JOIN "Keriteria" as k ON r.fk_keriteria = k.id JOIN "SubKomponen" as s ON k.fk_komponen = s.id WHERE fk_inspeksi = ${parseInt(
         id
       )} AND NOT verifikasi like 'Sesuai' AND NOT catatan = '' AND NOT catatan = '-' ;`;
-
-    const resultRekomendasi =
-      await prisma.$queryRaw`SELECT * FROM "RInspeksiKomponen" WHERE fk_inspeksi = ${parseInt(
-        id
-      )} `;
 
     const resultRInspeksiSubKomponen =
       await prisma.$queryRaw`SELECT SUM(nilai), fk_component FROM "RInspeksiSubKomponen" as a JOIN "SubKomponen" as b ON a.fk_sub_component = b.id  WHERE fk_inspeksi = ${parseInt(
@@ -673,25 +738,36 @@ exports.setPDF = async (req, res) => {
           }),
         ],
       });
-      resultInspeksiKriteria.forEach((resultKeriteria, index) => {
-        if (item.id == resultKeriteria.fk_component) {
-          doc.addSection({
-            properties: {
-              type: SectionType.CONTINUOUS,
-            },
-            children: [
-              new Paragraph({
-                spacing: { line: 360 },
-                text: resultKeriteria.catatan,
-                numbering: {
-                  reference: "numbering-format",
-                  level: 2,
+
+      result.map((result, index) => {
+        result.SubKomponen.map((subkomponen, index) => {
+          subkomponen.Keriteria.map((resultCatatan, index) => {
+            if (
+              (item.id == subkomponen.FK_Component &&
+                resultCatatan.Catatan.verifikasi.includes("Sebagian")) ||
+              resultCatatan.Catatan.verifikasi.includes("Tidak")
+            ) {
+              console.log(resultCatatan);
+              doc.addSection({
+                properties: {
+                  type: SectionType.CONTINUOUS,
                 },
-              }),
-            ],
+                children: [
+                  new Paragraph({
+                    spacing: { line: 360 },
+                    text: resultCatatan.Catatan.catatan,
+                    numbering: {
+                      reference: "numbering-format",
+                      level: 2,
+                    },
+                  }),
+                ],
+              });
+            }
           });
-        }
+        });
       });
+      resultInspeksiKriteria.forEach((resultKeriteria, index) => {});
     });
 
     doc.addSection({
@@ -726,24 +802,26 @@ exports.setPDF = async (req, res) => {
           }),
         ],
       });
-      resultRekomendasi.forEach((resultRekomendasi, index) => {
-        if (item.id == resultRekomendasi.fk_komponen) {
-          doc.addSection({
-            properties: {
-              type: SectionType.CONTINUOUS,
-            },
-            children: [
-              new Paragraph({
-                spacing: { line: 360 },
-                text: resultRekomendasi.rekomendasi,
-                numbering: {
-                  reference: "numbering-format",
-                  level: 2,
-                },
-              }),
-            ],
-          });
-        }
+      resultRekomendasi[0].forEach((resultRekomendasiMap, indexfirst) => {
+        resultRekomendasiMap.Rekomendasi.map((result, index) => {
+          if (item.id == result.Fk_Komponen) {
+            doc.addSection({
+              properties: {
+                type: SectionType.CONTINUOUS,
+              },
+              children: [
+                new Paragraph({
+                  spacing: { line: 360 },
+                  text: result.rekomendasi,
+                  numbering: {
+                    reference: "numbering-format",
+                    level: 2,
+                  },
+                }),
+              ],
+            });
+          }
+        });
       });
     });
 
