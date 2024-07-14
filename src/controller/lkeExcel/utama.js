@@ -2,11 +2,21 @@ const { PrismaClient } = require("@prisma/client");
 const fs = require("fs");
 const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
+const axios = require("axios");
+const { start } = require("repl");
+const { response } = require("express");
 
 exports.setExcelLKEUtama = async (req, res) => {
   const result = [];
+  const resultRekomendasi = [];
+  let dataInspeksi = {};
   try {
     const { id } = req.params;
+
+    const result1 =
+      await prisma.$queryRaw`SELECT * from "Inspeksi" WHERE id = ${parseInt(
+        id
+      )}`;
 
     await axios
       .get(
@@ -50,10 +60,33 @@ exports.setExcelLKEUtama = async (req, res) => {
         console.log(error);
       });
 
-    const result1 =
-      await prisma.$queryRaw`SELECT * from "Inspeksi" WHERE id = ${parseInt(
-        id
-      )}`;
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/rekomendasi?inspeksi=${id}`
+      )
+      .then(function (response) {
+        resultRekomendasi.push(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    await axios
+      .get(
+        `https://inspektorat-be.agriciatech.com/api/v1/inspeksis/${parseInt(
+          result1[0].fk_user
+        )}/${parseInt(result1[0].fk_tahun)}`
+      )
+      .then(function (response) {
+        dataInspeksi = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    const predikat = dataInspeksi.kategori;
+
+    console.log(parseInt(result1[0].fk_tahun));
+
     const resultTahun =
       await prisma.$queryRaw`SELECT * from "Tahun" WHERE pk_tahun_id = ${parseInt(
         result1[0].fk_tahun
@@ -63,20 +96,13 @@ exports.setExcelLKEUtama = async (req, res) => {
         result1[0].fk_user
       )}`;
 
-    const predikat = result1[0].kategori;
-
     const resultComponent =
       await prisma.$queryRaw`SELECT * FROM "Component" ORDER BY nomor`;
 
-    const resultInspeksiKriteria =
-      await prisma.$queryRaw`SELECT * FROM "RInspeksiKriteria" as r JOIN "Keriteria" as k ON r.fk_keriteria = k.id JOIN "SubKomponen" as s ON k.fk_komponen = s.id WHERE fk_inspeksi = ${parseInt(
-        id
-      )} AND NOT verifikasi like 'Sesuai' AND NOT catatan = '' AND NOT catatan = '-' ;`;
-
-    const resultRekomendasi =
-      await prisma.$queryRaw`SELECT * FROM "RInspeksiKomponen" WHERE fk_inspeksi = ${parseInt(
-        id
-      )} `;
+    // const resultRekomendasi =
+    //   await prisma.$queryRaw`SELECT * FROM "RInspeksiKomponen" WHERE fk_inspeksi = ${parseInt(
+    //     id
+    //   )} `;
 
     const resultRInspeksiSubKomponen =
       await prisma.$queryRaw`SELECT SUM(nilai), fk_component FROM "RInspeksiSubKomponen" as a JOIN "SubKomponen" as b ON a.fk_sub_component = b.id  WHERE fk_inspeksi = ${parseInt(
@@ -84,8 +110,8 @@ exports.setExcelLKEUtama = async (req, res) => {
       )} GROUP BY fk_component ORDER BY fk_component`;
 
     let total = 0;
-    resultRInspeksiSubKomponen.map((item, index) => {
-      total += parseFloat(item.sum);
+    result.map((item, index) => {
+      total += parseFloat(item.nilai);
     });
     const tahun = resultTahun[0].tahun;
     const user = resultInspektur[0].name;
@@ -157,16 +183,28 @@ exports.setExcelLKEUtama = async (req, res) => {
     worksheet.addRow(headers2);
     const headerAktual2 = worksheet.actualRowCount + 2;
     worksheet.mergeCells(`B${headerAktual2}:D${headerAktual2}`);
-    const catatanComponent = [];
 
-    resultInspeksiKriteria.forEach((resultRekomendasi, index) => {
-      catatanComponent.push([index + 1, resultRekomendasi.catatan]);
+    let nomorStart = 0;
+    result.map((item, index) => {
+      item.SubKomponen.map((subkomponen, index) => {
+        subkomponen.Keriteria.map((test, index) => {
+          nomorStart++;
+          worksheet.addRow([nomorStart, test.Catatan.catatan]);
+          const row = worksheet.actualRowCount + 1;
+          // worksheet.mergeCells(`B${row}:D${row}`);
+        });
+      });
     });
-    catatanComponent.forEach((row) => {
-      worksheet.addRow(row);
-      const test = worksheet.actualRowCount + 1;
-      // worksheet.mergeCells(`B${test}:D${test}`);
-    });
+    // const catatanComponent = [];
+
+    // resultInspeksiKriteria.forEach((resultRekomendasi, index) => {
+    //   catatanComponent.push([index + 1, resultRekomendasi.catatan]);
+    // });
+    // catatanComponent.forEach((row) => {
+    //   worksheet.addRow(row);
+    //   const test = worksheet.actualRowCount + 1;
+    //   // worksheet.mergeCells(`B${test}:D${test}`);
+    // });
 
     worksheet.addRow();
     const headers3 = ["No", "Rekomendasi"];
@@ -176,16 +214,16 @@ exports.setExcelLKEUtama = async (req, res) => {
     const headerAktual3 = worksheet.actualRowCount + 3;
     worksheet.mergeCells(`B${headerAktual3}:D${headerAktual3}`);
 
-    const rekomendasiComponent = [];
+    nomorStart = 0;
+    resultRekomendasi[0].forEach((resultRekomendasiMap, indexfirst) => {
+      resultRekomendasiMap.Rekomendasi.map((result, index) => {
+        nomorStart++;
+        worksheet.addRow([nomorStart, result.rekomendasi]);
+        const test = worksheet.actualRowCount + 1;
+        // worksheet.mergeCells(`B${test}:D${test}`);
+      });
+    });
 
-    resultRekomendasi.forEach((resultRekomendasi, index) => {
-      rekomendasiComponent.push([index + 1, resultRekomendasi.rekomendasi]);
-    });
-    rekomendasiComponent.forEach((row) => {
-      worksheet.addRow(row);
-      const test = worksheet.actualRowCount + 1;
-      // worksheet.mergeCells(`B${test}:D${test}`);
-    });
     worksheet.addRow();
 
     worksheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
@@ -248,25 +286,6 @@ exports.setExcelLKEUtama = async (req, res) => {
     // Auto-size columns (optional)
 
     const outputFile = `uploads/LKE Utama Evaluasi SAKIP ${user} ${tahun}.xlsx`;
-
-    fs.access(outputFile, fs.constants.F_OK, (err) => {
-      if (err) {
-        if (err.code === "ENOENT") {
-          console.log("File does not exist");
-        } else {
-          console.error("Error checking file existence:", err);
-        }
-      } else {
-        // File exists, so unlink (delete) it
-        fs.unlink(outputFile, (unlinkErr) => {
-          if (unlinkErr) {
-            console.error("Error deleting file:", unlinkErr);
-          } else {
-            console.log(`${outputFile} has been deleted successfully`);
-          }
-        });
-      }
-    });
 
     await workbook.xlsx.writeFile(outputFile);
     res.status(200).json({ data: outputFile });
