@@ -743,9 +743,9 @@ exports.setPDF = async (req, res) => {
         result.SubKomponen.map((subkomponen, index) => {
           subkomponen.Keriteria.map((resultCatatan, index) => {
             if (
-              (item.id == subkomponen.FK_Component &&
-                resultCatatan.Catatan.verifikasi.includes("Sebagian")) ||
-              resultCatatan.Catatan.verifikasi.includes("Tidak")
+              item.id == subkomponen.FK_Component &&
+              (resultCatatan.Catatan.verifikasi.includes("Sebagian") ||
+                resultCatatan.Catatan.verifikasi.includes("Tidak"))
             ) {
               console.log(resultCatatan);
               doc.addSection({
