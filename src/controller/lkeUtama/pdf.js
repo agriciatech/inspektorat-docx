@@ -432,7 +432,7 @@ exports.setPDF = async (req, res) => {
             new Paragraph({
               children: [
                 new TextRun({ text: "Hal" }),
-                new TextRun("\t: Laporan Evaluasi Akuintabilitas"),
+                new TextRun("\t: Laporan Evaluasi Akuntabilitas"),
               ],
               tabStops: [
                 {
