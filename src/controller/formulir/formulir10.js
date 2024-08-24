@@ -32,6 +32,7 @@ const {
 const fs = require("fs");
 const prisma = new PrismaClient();
 const axios = require("axios");
+const { text } = require("express");
 
 function cmToTwip(cm) {
   return Math.round(cm * 28.35 * 20); // Convert cm to points and then to twentieths of a point
@@ -211,8 +212,8 @@ exports.formulir10 = async (req, res) => {
 
           listParagraph: {
             run: {
-              size: "12pt",
-              font: "Arial",
+              size: "11pt",
+              font: "Bookman Old Style",
             },
             paragraph: {
               alignment: AlignmentType.JUSTIFIED,
@@ -220,8 +221,8 @@ exports.formulir10 = async (req, res) => {
           },
           document: {
             run: {
-              size: "12pt",
-              font: "Arial",
+              size: "11pt",
+              font: "Bookman Old Style",
             },
             paragraph: {
               alignment: AlignmentType.JUSTIFIED,
@@ -236,8 +237,8 @@ exports.formulir10 = async (req, res) => {
           basedOn: "Normal",
           next: "Normal",
           run: {
-            size: "12pt",
-            font: "Arial",
+            size: "11pt",
+            font: "Bookman Old Style",
           },
           paragraph: {
             alignment: AlignmentType.JUSTIFIED,
@@ -377,7 +378,7 @@ exports.formulir10 = async (req, res) => {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      children: ["TEST", PageNumber.CURRENT],
+                      children: [PageNumber.CURRENT],
                     }),
                   ],
                 }),
@@ -389,7 +390,7 @@ exports.formulir10 = async (req, res) => {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      children: ["TEST", PageNumber.CURRENT],
+                      children: [],
                     }),
                   ],
                 }),
@@ -397,36 +398,35 @@ exports.formulir10 = async (req, res) => {
             }),
           },
           children: [
-            new Paragraph({
-              text: "halo",
-              border: {
-                top: {
-                  color: "auto",
-                  space: 1,
-                  value: BorderStyle.SINGLE,
-                  size: 6,
-                },
-                bottom: {
-                  color: "auto",
-                  space: 1,
-                  value: BorderStyle.SINGLE,
-                  size: 6,
-                },
-                left: {
-                  color: "auto",
-                  space: 1,
-                  value: BorderStyle.SINGLE,
-                  size: 6,
-                },
-              },
-              spacing: {
-                before: 200, // Space before the paragraph with the border
-                after: 200, // Space after the paragraph with the border
-              },
-              margin: {
-                left: 400, // Space inside the border on the left
-              },
-            }),
+            // new Paragraph({
+            //   border: {
+            //     top: {
+            //       color: "auto",
+            //       space: 1,
+            //       value: BorderStyle.SINGLE,
+            //       size: 6,
+            //     },
+            //     bottom: {
+            //       color: "auto",
+            //       space: 1,
+            //       value: BorderStyle.SINGLE,
+            //       size: 6,
+            //     },
+            //     left: {
+            //       color: "auto",
+            //       space: 1,
+            //       value: BorderStyle.SINGLE,
+            //       size: 6,
+            //     },
+            //   },
+            //   spacing: {
+            //     before: 200, // Space before the paragraph with the border
+            //     after: 200, // Space after the paragraph with the border
+            //   },
+            //   margin: {
+            //     left: 400, // Space inside the border on the left
+            //   },
+            // }),
             new Paragraph({
               text: "PERNYATAAN PERJANJIAN KINERJA ",
               alignment: AlignmentType.CENTER,
@@ -440,395 +440,288 @@ exports.formulir10 = async (req, res) => {
               text: "",
             }),
             new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
               text: "-Logo Lembaga",
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: "",
             }),
             new Paragraph({
               text: "PERJANJIAN KINERJA TAHUN ..........................",
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              text: " ",
+            }),
+
+            new Paragraph({
+              text: `Dalam rangka mewujudkan manajemen pemerintahan yang efektif, transparandan akuntabel serta berorientasi pada hasil, kami yang bertanda tangan di bawah ini:`,
+            }),
+            new Paragraph({
+              text: " ",
+            }),
+
+            new Paragraph({
+              spacing: { line: 360 },
+              text: `   Nama : `,
+            }),
+            new Paragraph({
+              spacing: { line: 360 },
+              text: `   Jabatan : `,
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              spacing: { line: 360 },
+              text: `selanjutnya disebut pihak pertama  : `,
+            }),
+            new Paragraph({
+              text: "",
+            }),
+
+            new Paragraph({
+              spacing: { line: 360 },
+              text: `   Nama : `,
+            }),
+
+            new Paragraph({
+              spacing: { line: 360 },
+              text: `   Jabatan : `,
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: "selaku atasan pihak pertama, selanjutnya disebut pihak kedua",
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: `Pihak pertama berjanji akan mewujudkan target kinerja yang seharusnya
+                    sesuai lampiran perjanjian ini, dalam rangka mencapai target kinerja jangka
+                    menengah seperti yang telah ditetapkan dalam dokumen perencanaan.
+                    Keberhasilan dan kegagalan pencapaian target kinerja tersebut menjadi
+                    tanggung jawab kami.`,
+            }),
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: `Pihak kedua akan melakukan supervisi yang diperlukan serta akan melakukan
+                    evaluasi terhadap capaian kinerja dari perjanjian ini dan mengambil tindakan
+                    yang diperlukan dalam rangka pemberian penghargaan dan sanksi.`,
+            }),
+
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: "",
             }),
           ],
         },
       ],
     });
-
-    const items = [
-      "Memperoleh informasi tentang Implementasi SAKIP",
-      "Menilai tingkat implementasi SAKIP",
-      "Menilai tingkat Akuntabilitas Kinerja",
-      "Memberikan saran perbaikan untuk peningkatan implementasi SAKIP.",
-      "Memonitor tindak lanjut rekomendasi hasil evaluasi periode sebelumnya",
-    ];
-
-    items.forEach((item, index) => {
-      doc.addSection({
-        properties: {
-          type: SectionType.CONTINUOUS,
-        },
-        children: [
-          new Paragraph({
-            spacing: { line: 360 },
-            text: item,
-            numbering: {
-              reference: "numbering-format",
-              level: 1,
-            },
-          }),
-        ],
-      });
-    });
-
-    doc.addSection({
-      properties: {
-        type: SectionType.CONTINUOUS,
+    const table = new Table({
+      columnWidths: [3505, 5505],
+      borders: {
+        top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
       },
-      children: [
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `Evaluasi dilaksanakan terhadap 4 (empat) komponen besar manajemen kinerja, yang meliputi: Perencanaan Kinerja, Pengukuran Kinerja, Pelaporan kinerja, Evaluasi Akuntabilitas Kinerja Internal. Laporan Kinerja Instansi Pemerintah (LKjIP) tahun ${
-            parseInt(tahun) - 1
-          } merupakan salah satu dokumen yang dievaluasi selain dokumen Rencana Strategis (Renstra), dokumen Rencana Kerja (Renja), dokumen Penetapan Kinerja (PK), dokumen Pohon Kinerja serta dokumen terkait lainnya.`,
-          numbering: {
-            reference: "numbering-format",
-            level: 0,
-          },
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `Hasil evaluasi dituangkan dalam bentuk nilai dengan kisaran mulai dari 0 s.d. 100. Berdasarkan hasil evaluasi, tingkat akuntabilitas ${user} Kabupaten Lampung Selatan memperoleh nilai sebesar ${total.toString()} dengan kategori ${predikat}`,
-          numbering: {
-            reference: "numbering-format",
-            level: 0,
-          },
-        }),
-      ],
-    });
-
-    doc.addSection({
-      properties: {
-        type: SectionType.CONTINUOUS,
-      },
-      children: [
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `Nilai tersebut merupakan akumulasi penilaian terhadap seluruh komponen manajemen kinerja yang dievaluasi pada ${user} Kabupaten Lampung Selatan untuk Tahun ${tahun}, dengan rincian sebagai berikut:`,
-          numbering: {
-            reference: "numbering-format",
-            level: 0,
-          },
-        }),
-      ],
-    });
-
-    doc.addSection({
-      properties: {
-        type: SectionType.CONTINUOUS,
-      },
-      children: [
-        new Table({
-          width: {
-            size: 8090,
-            type: WidthType.DXA,
-          },
-          indent: {
-            size: 320,
-            type: WidthType.DXA,
-          },
-          rows: [
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "No",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "Komponen",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "Bobot (%)",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "Nilai",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-              ],
-            }),
-            ...generateRows(resultComponent, resultRInspeksiSubKomponen),
-            new TableRow({
-              children: [
-                new TableCell({
-                  columnSpan: 2,
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "Nilai Akuntabilitas Kinerja",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: "100",
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: total.toFixed(2).toString(),
-                        }),
-                      ],
-                      alignment: AlignmentType.CENTER,
-                    }),
-                  ],
-                  verticalAlign: VerticalAlign.CENTER,
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    });
-    doc.addSection({
-      properties: {
-        type: SectionType.CONTINUOUS,
-      },
-      children: [
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `Berdasarkan hasil evaluasi, dijumpai permasalahan terkait implementasi SAKIP pada ${user} Kabupaten Lampung Selatan sebagai berikut:`,
-          numbering: {
-            reference: "numbering-format",
-            level: 0,
-          },
-        }),
-      ],
-    });
-
-    resultComponent.forEach((item, index) => {
-      doc.addSection({
-        properties: {
-          type: SectionType.CONTINUOUS,
-        },
-        children: [
-          new Paragraph({
-            spacing: { line: 360 },
-            text: item.component,
-            numbering: {
-              reference: "numbering-format",
-              level: 1,
-            },
-          }),
-        ],
-      });
-
-      result.map((result, index) => {
-        result.SubKomponen.map((subkomponen, index) => {
-          subkomponen.Keriteria.map((resultCatatan, index) => {
-            if (
-              item.id == subkomponen.FK_Component &&
-              (resultCatatan.Catatan.verifikasi.includes("Sebagian") ||
-                resultCatatan.Catatan.verifikasi.includes("Tidak"))
-            ) {
-              console.log(resultCatatan);
-              doc.addSection({
-                properties: {
-                  type: SectionType.CONTINUOUS,
-                },
-                children: [
-                  new Paragraph({
-                    spacing: { line: 360 },
-                    text: resultCatatan.Catatan.catatan,
-                    numbering: {
-                      reference: "numbering-format",
-                      level: 2,
-                    },
-                  }),
-                ],
-              });
-            }
-          });
-        });
-      });
-      resultInspeksiKriteria.forEach((resultKeriteria, index) => {});
-    });
-
-    doc.addSection({
-      properties: {
-        type: SectionType.CONTINUOUS,
-      },
-      children: [
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `Terhadap permasalahan di atas, kami rekomendasikan kepada Kepala ${user} Kabupaten Lampung Selatan beserta seluruh jajaran untuk melakukan perbaikan sebagai berikut:`,
-          numbering: {
-            reference: "numbering-format",
-            level: 0,
-          },
-        }),
-      ],
-    });
-
-    resultComponent.forEach((item, index) => {
-      doc.addSection({
-        properties: {
-          type: SectionType.CONTINUOUS,
-        },
-        children: [
-          new Paragraph({
-            spacing: { line: 360 },
-            text: item.component,
-            numbering: {
-              reference: "numbering-format",
-              level: 1,
-            },
-          }),
-        ],
-      });
-      resultRekomendasi[0].forEach((resultRekomendasiMap, indexfirst) => {
-        resultRekomendasiMap.Rekomendasi.map((result, index) => {
-          if (item.id == result.Fk_Komponen) {
-            doc.addSection({
-              properties: {
-                type: SectionType.CONTINUOUS,
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
               },
               children: [
                 new Paragraph({
-                  spacing: { line: 360 },
-                  text: result.rekomendasi,
-                  numbering: {
-                    reference: "numbering-format",
-                    level: 2,
-                  },
+                  text: "",
                 }),
               ],
-            });
-          }
-        });
-      });
+            }),
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
+              },
+              children: [
+                new Paragraph({
+                  text: "......................,................",
+                  alignment: AlignmentType.CENTER,
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+              ],
+            }),
+          ],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
+              },
+              children: [
+                new Paragraph({
+                  text: "Pihak Kedua,",
+                  alignment: AlignmentType.CENTER,
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
+              },
+              children: [
+                new Paragraph({
+                  text: "Pihak Pertama,",
+                  alignment: AlignmentType.CENTER,
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+                new Paragraph({
+                  text: "",
+                }),
+              ],
+            }),
+          ],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
+              },
+              children: [
+                new Paragraph({
+                  text: "...........................................",
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              },
+              width: {
+                size: 5505,
+                type: WidthType.DXA,
+              },
+
+              children: [
+                new Paragraph({
+                  text: "...........................................",
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
     });
 
     doc.addSection({
       properties: {
         type: SectionType.CONTINUOUS,
       },
-      children: [
-        new Paragraph({
-          spacing: { line: 360 },
-          text: `\t Demikian hasil evaluasi atas AKIP pada ${user} Kabupaten Lampung Selatan Tahun ${tahun}, dimohon kerjasama Saudara dalam melakukan perbaikan dan menindaklanjuti saran yang telah diberikan oleh Tim Evaluasi Inspektorat Kabupaten Lampung Selatan. Atas perhatian dan kerjasamanya, kami ucapkan terimakasih.`,
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "INSPEKTUR,",
-          indent: {
-            left: convertInchesToTwip(4.2),
-            hanging: convertInchesToTwip(0),
-          },
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "XXXXXXXXX",
-          indent: {
-            left: convertInchesToTwip(4.2),
-            hanging: convertInchesToTwip(0),
-          },
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "XXXXXXXXX",
-          indent: {
-            left: convertInchesToTwip(4.2),
-            hanging: convertInchesToTwip(0),
-          },
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "NIP.XXXXXXX",
-          indent: {
-            left: convertInchesToTwip(4.2),
-            hanging: convertInchesToTwip(0),
-          },
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "Tembusan disampaikan kepada Yth:",
-        }),
-        new Paragraph({
-          spacing: { line: 360 },
-          text: "Bupati Lampung Selatan (sebagai laporan)",
-        }),
-      ],
+      children: [new Paragraph({ text: " " }), table],
     });
-
     const outputFile = `uploads/formulir10-${user}-${tahun}.docx`;
 
     fs.access(outputFile, fs.constants.F_OK, (err) => {
