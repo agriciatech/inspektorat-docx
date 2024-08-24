@@ -23,6 +23,10 @@ const {
   TableCell,
   WidthType,
   TabStopPosition,
+  BorderStyle,
+  PageBorderDisplay,
+  PageBorderOffsetFrom,
+  PageBorderZOrder,
   convertInchesToTwip,
 } = require("docx");
 const fs = require("fs");
@@ -363,6 +367,7 @@ exports.formulir10 = async (req, res) => {
                 formatType: NumberFormat.DECIMAL,
               },
             },
+
             type: SectionType.CONTINUOUS,
           },
           headers: {
@@ -372,7 +377,7 @@ exports.formulir10 = async (req, res) => {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      children: ["", PageNumber.CURRENT],
+                      children: ["TEST", PageNumber.CURRENT],
                     }),
                   ],
                 }),
@@ -384,7 +389,7 @@ exports.formulir10 = async (req, res) => {
                   alignment: AlignmentType.CENTER,
                   children: [
                     new TextRun({
-                      children: [],
+                      children: ["TEST", PageNumber.CURRENT],
                     }),
                   ],
                 }),
@@ -393,125 +398,52 @@ exports.formulir10 = async (req, res) => {
           },
           children: [
             new Paragraph({
-              text: "Kalianda,",
-              alignment: AlignmentType.RIGHT,
-            }),
-            new Paragraph({
-              text: " ",
-            }),
-            new Paragraph({
-              text: " ",
-            }),
-            new Paragraph({
-              children: [new TextRun({ text: "Nomor" }), new TextRun("\t:")],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
+              text: "halo",
+              border: {
+                top: {
+                  color: "auto",
+                  space: 1,
+                  value: BorderStyle.SINGLE,
+                  size: 6,
                 },
-              ],
-            }),
-            new Paragraph({
-              children: [new TextRun({ text: "Sifat" }), new TextRun("\t:")],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
+                bottom: {
+                  color: "auto",
+                  space: 1,
+                  value: BorderStyle.SINGLE,
+                  size: 6,
                 },
-              ],
-            }),
-            new Paragraph({
-              children: [new TextRun({ text: "Lampiran" }), new TextRun("\t:")],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
+                left: {
+                  color: "auto",
+                  space: 1,
+                  value: BorderStyle.SINGLE,
+                  size: 6,
                 },
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({ text: "Hal" }),
-                new TextRun("\t: Laporan Evaluasi Akuntabilitas"),
-              ],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
-                },
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({ text: "" }),
-                new TextRun("\t  Kinerja pada "),
-                new TextRun(user),
-              ],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
-                },
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({ text: "" }),
-                new TextRun("\t  Kabupaten Lampung Selatan"),
-              ],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 1300,
-                },
-              ],
-            }),
-            new Paragraph({
-              text: "",
-            }),
-            new Paragraph({
-              text: "Yth. ",
-            }),
-            new Paragraph({
-              children: [new TextRun({ text: "" }), new TextRun("\t di - ")],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 300,
-                },
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({ text: "" }),
-                new TextRun("\t  Kalianda "),
-              ],
-              tabStops: [
-                {
-                  type: TabStopType.LEFT,
-                  position: 500,
-                },
-              ],
-            }),
-            new Paragraph({
-              text: "",
-            }),
-            new Paragraph({
-              style: "aside",
-              spacing: { line: 360 },
-              children: [
-                new TextRun({
-                  text: "\t Dalam rangka pelaksanaan Peraturan Pemerintah Nomor 8 Tahun 2006 tentang Pelaporan Keuangan dan Kinerja Instansi Pemerintah, Peraturan Presiden Nomor 29 Tahun 2014 tentang Sistem Akuntabilitas Kinerja Instansi Pemerintah (SAKIP) dan Peraturan Menteri Pendayagunaan Aparatur Negara dan Reformasi Birokrasi Nomor 88 Tahun 2021 tentang Evaluasi Akuntabilitas Kinerja Instansi Pemerintah, dengan ini kami sampaikan hal – hal sebagai berikut :",
-                }),
-              ],
-            }),
-            new Paragraph({
-              spacing: { line: 360 },
-              text: `Kami telah melaksanakan evalusi atas penerapan SAKIP Tahun ${tahun} pada ${user} Kabupaten Lampung Selatan dengan tujuan untuk :`,
-              numbering: {
-                reference: "numbering-format",
-                level: 0,
               },
+              spacing: {
+                before: 200, // Space before the paragraph with the border
+                after: 200, // Space after the paragraph with the border
+              },
+              margin: {
+                left: 400, // Space inside the border on the left
+              },
+            }),
+            new Paragraph({
+              text: "PERNYATAAN PERJANJIAN KINERJA ",
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              text: "TINGKAT UNIT KERJA/SKPD/SATUAN KERJA",
+              alignment: AlignmentType.CENTER,
+            }),
+
+            new Paragraph({
+              text: "",
+            }),
+            new Paragraph({
+              text: "-Logo Lembaga",
+            }),
+            new Paragraph({
+              text: "PERJANJIAN KINERJA TAHUN ..........................",
             }),
           ],
         },
@@ -897,7 +829,7 @@ exports.formulir10 = async (req, res) => {
       ],
     });
 
-    const outputFile = `uploads/LHE-AKIP-${user}-${tahun}.docx`;
+    const outputFile = `uploads/formulir10-${user}-${tahun}.docx`;
 
     fs.access(outputFile, fs.constants.F_OK, (err) => {
       if (err) {

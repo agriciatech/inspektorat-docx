@@ -5,6 +5,7 @@ const { setExcelLKE } = require("../controller/lkeExcel/LKEutama");
 const { setLKEExcel } = require("../controller/lkeExcel/lke");
 const { setExcelLKEUtama } = require("../controller/lkeExcel/utama");
 const { formulir10 } = require("../controller/formulir/formulir10");
+const { setForm9Result } = require("../controller/form9ByTahun/index");
 const router = express.Router();
 
 router.get("/inspkesisgeneratepdf/:id", setPDF);
@@ -13,5 +14,6 @@ router.get("/generateinspeksiexcel", setExcelLKE);
 router.get("/generateexcellke/:id", setLKEExcel);
 router.get("/generateexcelutama/:id", setExcelLKEUtama);
 router.get("/formulir10/:id", formulir10);
+router.get("/form9/:tahun", setForm9Result);
 
 module.exports = router;
