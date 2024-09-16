@@ -8,7 +8,7 @@ exports.setForm9Result = async (req, res) => {
 
 
     await axios.get(
-        `https://inspektorat-dev.agriciatech.com/api/v1/formulir9/view?tahun=${tahun}&opd=${idOPD}`
+        `https://inspektorat-be.agriciatech.com/api/v1/formulir9/view?tahun=${tahun}&opd=${idOPD}`
     ).then(async function (response) {
 
         console.log(response.data)
