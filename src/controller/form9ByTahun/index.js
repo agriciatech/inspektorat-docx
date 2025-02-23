@@ -1,4 +1,4 @@
-const { enpoint } = require("../../config/url");
+const enpoint = require("../../config/url");
 const { setForm9 } = require("./doc");
 const { setForm9page2 } = require("./doc2");
 const { default: axios } = require("axios");

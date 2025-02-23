@@ -3,7 +3,7 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
 const { default: axios } = require("axios");
-const { enpoint } = require("../../config/url");
+const enpoint = require("../../config/url");
 
 exports.setLKEExcel = async (req, res) => {
   let result = [];

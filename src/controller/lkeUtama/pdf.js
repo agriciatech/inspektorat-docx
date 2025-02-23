@@ -28,7 +28,7 @@ const {
 const fs = require("fs");
 const prisma = new PrismaClient();
 const axios = require("axios");
-const { enpoint } = require("../../config/url");
+const enpoint = require("../../config/url");
 
 function cmToTwip(cm) {
   return Math.round(cm * 28.35 * 20); // Convert cm to points and then to twentieths of a point

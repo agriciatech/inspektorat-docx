@@ -1,1 +1,3 @@
-export const enpoint = process.env.ENPOINT_API;
+const enpoint = process.env.ENPOINT_API;
+
+module.exports = enpoint;

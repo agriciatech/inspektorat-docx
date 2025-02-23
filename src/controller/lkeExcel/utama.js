@@ -5,7 +5,7 @@ const ExcelJS = require("exceljs");
 const axios = require("axios");
 const { start } = require("repl");
 const { response } = require("express");
-const { enpoint } = require("../../config/url");
+const enpoint = require("../../config/url");
 
 exports.setExcelLKEUtama = async (req, res) => {
   const result = [];
