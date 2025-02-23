@@ -3,6 +3,7 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
 const { default: axios } = require("axios");
+const { enpoint } = require("../../config/url");
 
 exports.setLKEExcel = async (req, res) => {
   let result = [];
@@ -23,9 +24,7 @@ exports.setLKEExcel = async (req, res) => {
         result1[0].fk_user
       )}`;
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${1}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${1}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -34,9 +33,7 @@ exports.setLKEExcel = async (req, res) => {
       });
 
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${2}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${2}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -44,9 +41,7 @@ exports.setLKEExcel = async (req, res) => {
         console.log(error);
       });
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${3}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${3}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -54,9 +49,7 @@ exports.setLKEExcel = async (req, res) => {
         console.log(error);
       });
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${4}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${4}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })

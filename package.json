@@ -20,7 +20,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon ./src/main.js"
+    "dev": "npx nodemon ./src/main.js",
+    "start": "npx prisma generate && npx prisma db push && node ./src/main.js"
   },
   "author": "",
   "license": "ISC",

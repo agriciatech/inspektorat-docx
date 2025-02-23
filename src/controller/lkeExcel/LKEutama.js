@@ -3,6 +3,7 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 const ExcelJS = require("exceljs");
 const axios = require("axios");
+const { enpoint } = require("../../config/url");
 
 exports.setExcelLKE = async (req, res) => {
   let result = [];
@@ -25,7 +26,7 @@ exports.setExcelLKE = async (req, res) => {
   ];
   try {
     await axios
-      .get("https://inspektorat-be.agriciatech.com/api/v1/inspeksis")
+      .get(`${enpoint}/api/v1/inspeksis`)
       .then(function (response) {
         result = response.data.data;
         average = response.data.yearData;

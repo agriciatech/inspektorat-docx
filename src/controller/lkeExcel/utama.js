@@ -5,6 +5,7 @@ const ExcelJS = require("exceljs");
 const axios = require("axios");
 const { start } = require("repl");
 const { response } = require("express");
+const { enpoint } = require("../../config/url");
 
 exports.setExcelLKEUtama = async (req, res) => {
   const result = [];
@@ -19,9 +20,7 @@ exports.setExcelLKEUtama = async (req, res) => {
       )}`;
 
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${1}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${1}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -30,9 +29,7 @@ exports.setExcelLKEUtama = async (req, res) => {
       });
 
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${2}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${2}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -40,9 +37,7 @@ exports.setExcelLKEUtama = async (req, res) => {
         console.log(error);
       });
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${3}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${3}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -50,9 +45,7 @@ exports.setExcelLKEUtama = async (req, res) => {
         console.log(error);
       });
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/components/${4}/${id}`
-      )
+      .get(`${enpoint}/api/v1/components/${4}/${id}`)
       .then(function (response) {
         result.push(response.data);
       })
@@ -61,9 +54,7 @@ exports.setExcelLKEUtama = async (req, res) => {
       });
 
     await axios
-      .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/rekomendasi?inspeksi=${id}`
-      )
+      .get(`${enpoint}/api/v1/rekomendasi?inspeksi=${id}`)
       .then(function (response) {
         resultRekomendasi.push(response.data.data);
       })
@@ -73,9 +64,9 @@ exports.setExcelLKEUtama = async (req, res) => {
 
     await axios
       .get(
-        `https://inspektorat-be.agriciatech.com/api/v1/inspeksis/${parseInt(
-          result1[0].fk_user
-        )}/${parseInt(result1[0].fk_tahun)}`
+        `${enpoint}/api/v1/inspeksis/${parseInt(result1[0].fk_user)}/${parseInt(
+          result1[0].fk_tahun
+        )}`
       )
       .then(function (response) {
         dataInspeksi = response.data;
